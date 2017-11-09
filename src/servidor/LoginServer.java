@@ -13,7 +13,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -23,6 +25,8 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+
+import com.sun.xml.internal.ws.api.message.Packet.Status;
 
 public class LoginServer {
 	
@@ -37,6 +41,11 @@ public class LoginServer {
 		public void runServer() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 			
 			List<Integer>contieneR=new ArrayList<Integer>();
+			Map<String,String>usuarios=new HashMap<String,String>();	//vamos a simular que el servidor tiene usuarios y claves
+			
+			usuarios.put("antonio", "5ad384db70c4eb37359efbea24bfa35b45c142024d3e294e44120d0bbf99682f");	//seguridad1
+			usuarios.put("enrique", "79b31c54ca9df56867a827cabc0475e13b2dcfd4e0302d8ad16c3cfe76d2129d");	//2
+			usuarios.put("pite", "204ac9e190418e28cf21e55b5d9a6f4e96653b626c2b9dd5121d41fba71182d2");		//3
 			
 			while(true) {
 				try	{
@@ -82,6 +91,26 @@ public class LoginServer {
 					
 					//ahora se debe comprobar que el user y passwd son correctos--- en caso de ser correcto enviamos OK
 					
+					try {	//el cliente necesita comprobar el tipo de respuesta para cortar o no la conexión.
+						
+						if(!usuarios.get(user).equals(passwd)) {
+							System.err.println("La clave: "+usuarios.get(user)+ " es incorrecta.");
+							
+							output.close();			
+							input.close();			
+							socket.close();
+						}else {
+							output.println(Status.Response);
+							output.flush();
+						}
+						
+					}catch(Exception e) {
+						System.err.println("Usuario: "+user+ " no existe.");
+						
+						output.close();			
+						input.close();			
+						socket.close();
+					}
 					
 					//--------
 					
