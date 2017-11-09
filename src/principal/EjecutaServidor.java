@@ -1,10 +1,11 @@
 package principal;
 
-import servidor.Servidor;
+import servidor.*;
 
 public class EjecutaServidor {
-	static public void main( String args[] ) {
-		
+	static public void main( String args[] ) throws Exception {
+		LoginServer	server	=	new	LoginServer();	
+		server.runServer();	
 		
 	}
 }

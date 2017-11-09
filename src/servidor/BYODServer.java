@@ -7,7 +7,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class Servidor implements Runnable{
+public class BYODServer implements Runnable{
 
 	public static void main(String[] args) throws Exception {
 		
@@ -17,9 +17,9 @@ public class Servidor implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		iniciaServidor server = null;
+		LoginServer server = null;
 		try {
-			server = new	iniciaServidor();
+			server = new	LoginServer();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

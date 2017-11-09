@@ -19,17 +19,22 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
-public class iniciaServidor {
+public class LoginServer {
 	
-		private	ServerSocket serverSocket;
+		private	SSLServerSocket serverSocket;
 		
-		public iniciaServidor() throws	Exception {				
-			ServerSocketFactory	socketFactory = (ServerSocketFactory) ServerSocketFactory.getDefault();		//CAMBIAR SOCKET
-			serverSocket=(ServerSocket)socketFactory.createServerSocket(7070);					//CAMBIAR
+		public LoginServer() throws	Exception {				
+			SSLServerSocketFactory socketFactory = (SSLServerSocketFactory)
+					SSLServerSocketFactory.getDefault();
+			serverSocket=(SSLServerSocket) socketFactory.createServerSocket(7070);
 		}		
 		
-		void runServer() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		public void runServer() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 			
 			List<Integer>contieneR=new ArrayList<Integer>();
 			
@@ -57,7 +62,7 @@ public class iniciaServidor {
 					
 					//--------------------------
 					
-					if(contieneR.contains(key)) {
+				/*	if(contieneR.contains(key)) {
 						System.err.println("Token usado - Posible ataque de replay - Tirando mensaje ..."
 								+ "");
 						output.close();			
@@ -66,35 +71,50 @@ public class iniciaServidor {
 						break;
 					}
 					
-					contieneR.add(key);
+					ES NECESARIO¿?
+					
+					contieneR.add(key);	*/
 					//-------
 					
-					//	Se	lee	del	cliente	el	mensaje	y	el	macdelMensajeEnviado
-					String	mensaje	= input.readLine();
-					System.out.println("Mensaje enviado por el cliente: "+mensaje);
+					//	Se	lee	del	cliente	el user y passwd
+					String user=input.readLine();
+					String passwd=input.readLine();
+					
+					//ahora se debe comprobar que el user y passwd son correctos--- en caso de ser correcto enviamos OK
+					
+					
+					//--------
+					
+					//si son correctos entonces ahora debemos recibir el mensaje
+					String	mensaje	= input.readLine();	//mensaje que envia el cliente una vez dentro
+				
+					//System.out.println("Mensaje enviado por el cliente: "+mensaje);
 					//	A	continuación	habría	que	calcular	el	mac	del	MensajeEnviado	que	podría	ser											
-					String	macdelMensajeEnviado = input.readLine();	
-					System.err.println("Mac del mensaje enviado: "+macdelMensajeEnviado+"\n");
+				
+					String	macdelMensajeEnviado = input.readLine();	//QUIZAS AQUI DEBERIA SER EL PASSWD	
+					//System.err.println("Mac del mensaje enviado: "+macdelMensajeEnviado+"\n");
+				
 					//especificacion del algoritmo mac- por defecto diremos macsha256
-					String alg=input.readLine();
+					
+					/*String alg=input.readLine();
 					System.out.println("Algoritmo Hmac utilizado: "+alg);
 					//mac	del	MensajeCalculado -----
 					
 					//String macMensajeEnviado = null;
-					String macdelMensajeCalculado = calculaMac.performMACTest(mensaje, alg,key);
+					String macdelMensajeCalculado = calculaMac.performMACTest(mensaje, alg,key);	*/
 					
 					//tratamiento de errores hmac----
-					if(macdelMensajeCalculado.equals("")) {
+			/*		if(macdelMensajeCalculado.equals("")) {
 						System.err.println("Hmac No valido, estableciendo por defecto Hmac256");
 					    macdelMensajeCalculado = calculaMac.performMACTest(mensaje, "HmacSHA256",key);
-					}
+					}	*/
 					// ------------------------------
 					
-					if	(macdelMensajeEnviado.equals(macdelMensajeCalculado))	{	
+				/*	if	(macdelMensajeEnviado.equals(macdelMensajeCalculado))	{		ahora habría que buscar otra compr	
 							output.println("Mensaje enviado integro.");	
 					}else{	
 						output.println(	"Mensaje enviado no integro.");
-					}
+					}		*/
 					
 					output.close();			
 					input.close();			
