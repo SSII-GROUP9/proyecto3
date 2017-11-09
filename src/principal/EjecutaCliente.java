@@ -1,11 +1,12 @@
 package principal;
 
-import cliente.Cliente;
+
+import cliente.*;
 
 public class EjecutaCliente {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static void main(String[] args) throws Exception {
+		new	IntegrityVerifierClient();
 	}
 
 }
