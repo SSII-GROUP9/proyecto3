@@ -7,7 +7,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class Cliente implements Runnable{
+public class BYODClient implements Runnable{
 
 	public static void main(String[] args) {
 		
