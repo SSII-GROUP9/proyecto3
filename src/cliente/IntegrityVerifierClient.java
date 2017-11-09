@@ -5,18 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
-import servidor.calculaMac;
 
 public	class	IntegrityVerifierClient	{
 		//Constructor que abre una conexión Socket para enviar mensaje/MAC al servidor
@@ -45,9 +41,8 @@ public	class	IntegrityVerifierClient	{
 					output.flush();
 					
 					//Comprobacion de credenciales
-					String login=input.readLine();
-					Boolean loginB= Boolean.valueOf(login);
-					if(loginB){
+					String status=input.readLine();
+					if(status.equals("OK")){ //¿qué responde?¿200?¿OK?
 						
 						//envio del mensaje al servidor
 						String message = JOptionPane.showInputDialog(null,"Introduzca el mensaje para el servidor: " );
