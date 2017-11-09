@@ -13,6 +13,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
 import servidor.calculaMac;
 
@@ -22,10 +24,12 @@ public	class	IntegrityVerifierClient	{
 			Boolean nuevoMensaje=true;
 			try	{	
 				while(nuevoMensaje) {
+					System.setProperty("javax.net.ssl.keyStore", "c:\\SSLStore"); //puede que sea innecesario
+					System.setProperty("javax.net.ssl.keyStorePassword", "123456"); //puede que sea innecesario
 					
-					SocketFactory socketFactory	= (SocketFactory)SocketFactory.getDefault();	//CAMBIAR
-					Socket	socket = (Socket)socketFactory.createSocket("localhost",7070);		//CAMBIAR
-					
+					SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();	//CAMBIAR
+					SSLSocket socket = (SSLSocket) socketFactory.createSocket("localhost",7070);		//CAMBIAR
+					socket.startHandshake();
 					//Crea un PrintWriter para enviar mensaje/MAC al servidor
 					PrintWriter	output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 					//Crea un objeto BufferedReader	para leer la respuesta del servidor
@@ -51,9 +55,9 @@ public	class	IntegrityVerifierClient	{
 					output.flush();
 					
 					//Habría que calcular el correspondiente MAC con la	clave compartida por servidor/cliente
-					String macdelMensaje = calculaMac.performMACTest(userName,alg,key);
-					output.println(macdelMensaje);
-					output.flush();
+//					String macdelMensaje = calculaMac.performMACTest(userName,alg,key);
+//					output.println(macdelMensaje);
+//					output.flush();
 					
 					//Habría que enviar el algoritmo de encriptacion que usamos
 					output.println(alg);//HmacSHA256
