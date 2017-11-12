@@ -15,11 +15,14 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
 
 public	class	IntegrityVerifierClient	{
-		//Constructor que abre una conexión Socket para enviar mensaje/MAC al servidor
+		//Constructor que abre una conexión SSLSocket para comunicarse con el servidor
 		public	IntegrityVerifierClient() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException{					
 			Boolean nuevoMensaje=true;
 			try	{	
 				while(nuevoMensaje) {
+					
+					System.setProperty("javax.net.ssl.trustStore", "certificado"+metodos.metodos.compruebaSys()+"SSLStore");
+					System.setProperty("javax.net.ssl.trustStorePassword", "123456");
 					
 					//Conexiones Socket
 					SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -42,7 +45,8 @@ public	class	IntegrityVerifierClient	{
 					
 					//Comprobacion de credenciales
 					String status=input.readLine();
-					if(status.equals("OK")){ //¿qué responde?¿200?¿OK?
+					System.out.println(status);
+					if(status.equals("OK")){
 						
 						//envio del mensaje al servidor
 						String message = JOptionPane.showInputDialog(null,"Introduzca el mensaje para el servidor: " );

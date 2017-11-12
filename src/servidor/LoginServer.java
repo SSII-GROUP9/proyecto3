@@ -32,7 +32,9 @@ public class LoginServer {
 	
 		private	SSLServerSocket serverSocket;
 		
-		public LoginServer() throws	Exception {				
+		public LoginServer() throws	Exception {		
+			System.setProperty("javax.net.ssl.keyStore", "certificado"+metodos.metodos.compruebaSys()+"SSLStore");
+			System.setProperty("javax.net.ssl.keyStorePassword","123456");
 			SSLServerSocketFactory socketFactory = (SSLServerSocketFactory)
 					SSLServerSocketFactory.getDefault();
 			serverSocket=(SSLServerSocket) socketFactory.createServerSocket(7070);
@@ -49,6 +51,8 @@ public class LoginServer {
 			
 			while(true) {
 				try	{
+					
+					
 					
 					System.err.println("Esperando conexiones de clientes...");	
 					Socket socket =	(Socket)serverSocket.accept();
@@ -100,7 +104,8 @@ public class LoginServer {
 							input.close();			
 							socket.close();
 						}else {
-							output.println(Status.Response);
+							//output.println(Status.Response);//devuelve literalmente "Response"
+							output.println("OK");
 							output.flush();
 						}
 						
