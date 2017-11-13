@@ -5,35 +5,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import principal.*;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 
-import com.sun.xml.internal.ws.api.message.Packet.Status;
 
 public class LoginServer {
 	
 		private	SSLServerSocket serverSocket;
 		
 		public LoginServer() throws	Exception {		
-			System.setProperty("javax.net.ssl.keyStore", "certificado"+metodos.metodos.compruebaSys()+"SSLStore");
+			System.setProperty("javax.net.ssl.keyStore", "certificado"+metodos.compruebaSys()+"SSLStore");
 			System.setProperty("javax.net.ssl.keyStorePassword","123456");
 			SSLServerSocketFactory socketFactory = (SSLServerSocketFactory)
 					SSLServerSocketFactory.getDefault();
@@ -42,7 +34,7 @@ public class LoginServer {
 		
 		public void runServer() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 			
-			List<Integer>contieneR=new ArrayList<Integer>();
+			//List<Integer>contieneR=new ArrayList<Integer>();
 			Map<String,String>usuarios=new HashMap<String,String>();	//vamos a simular que el servidor tiene usuarios y claves
 			
 			usuarios.put("antonio", "5ad384db70c4eb37359efbea24bfa35b45c142024d3e294e44120d0bbf99682f");	//seguridad1
@@ -50,14 +42,12 @@ public class LoginServer {
 			usuarios.put("pite", "204ac9e190418e28cf21e55b5d9a6f4e96653b626c2b9dd5121d41fba71182d2");		//3
 			
 			while(true) {
-				try	{
-					
-					
-					
-					System.err.println("Esperando conexiones de clientes...");	
+				try	{	
 					Socket socket =	(Socket)serverSocket.accept();
 					BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					PrintWriter	output	= new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+					
+					System.err.println("Esperando conexiones de clientes...");
 					
 					//comunicación segura token-
 					
@@ -98,19 +88,18 @@ public class LoginServer {
 					try {	//el cliente necesita comprobar el tipo de respuesta para cortar o no la conexión.
 						
 						if(!usuarios.get(user).equals(passwd)) {
-							System.err.println("La clave: "+usuarios.get(user)+ " es incorrecta.");
+							System.err.println("La clave usada es incorrecta.\n");
 							
 							output.close();			
 							input.close();			
 							socket.close();
 						}else {
-							//output.println(Status.Response);//devuelve literalmente "Response"
-							output.println("OK");
+							output.println("200");
 							output.flush();
 						}
 						
 					}catch(Exception e) {
-						System.err.println("Usuario: "+user+ " no existe.");
+						System.err.println("Usuario: "+user+ " no existe.\n");
 						
 						output.close();			
 						input.close();			
@@ -125,7 +114,7 @@ public class LoginServer {
 					//System.out.println("Mensaje enviado por el cliente: "+mensaje);
 					//	A	continuación	habría	que	calcular	el	mac	del	MensajeEnviado	que	podría	ser											
 				
-					String	macdelMensajeEnviado = input.readLine();	//QUIZAS AQUI DEBERIA SER EL PASSWD	
+					//String	macdelMensajeEnviado = input.readLine();	//QUIZAS AQUI DEBERIA SER EL PASSWD	
 					//System.err.println("Mac del mensaje enviado: "+macdelMensajeEnviado+"\n");
 				
 					//especificacion del algoritmo mac- por defecto diremos macsha256
@@ -154,7 +143,9 @@ public class LoginServer {
 					input.close();			
 					socket.close();	
 					
-			}catch (IOException	ioException){ioException.printStackTrace();}	
+			}catch (IOException	ioException){
+				ioException.printStackTrace();
+				}	
 		}
 	}
 		

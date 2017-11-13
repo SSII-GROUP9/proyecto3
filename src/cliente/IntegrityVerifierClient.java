@@ -13,6 +13,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
+import principal.*;
 
 public	class	IntegrityVerifierClient	{
 		//Constructor que abre una conexión SSLSocket para comunicarse con el servidor
@@ -21,8 +22,8 @@ public	class	IntegrityVerifierClient	{
 			try	{	
 				while(nuevoMensaje) {
 					
-					System.setProperty("javax.net.ssl.trustStore", "certificado"+metodos.metodos.compruebaSys()+"SSLStore");
-					System.setProperty("javax.net.ssl.trustStorePassword", "123456");
+					System.setProperty("javax.net.ssl.trustStore", "certificado"+metodos.compruebaSys()+"SSLStore");
+					//System.setProperty("javax.net.ssl.trustStorePassword", "123456");
 					
 					//Conexiones Socket
 					SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -40,13 +41,14 @@ public	class	IntegrityVerifierClient	{
 					output.flush();
 					
 					String password = JOptionPane.showInputDialog(null,"Introduzca su constraseña: " );
-					output.println(password);
+					output.println(metodos.generaHash(password));
 					output.flush();
 					
 					//Comprobacion de credenciales
 					String status=input.readLine();
-					System.out.println(status);
-					if(status.equals("OK")){
+					//System.out.println(status);
+					
+					if(status.equals("200")){
 						
 						//envio del mensaje al servidor
 						String message = JOptionPane.showInputDialog(null,"Introduzca el mensaje para el servidor: " );
@@ -64,8 +66,8 @@ public	class	IntegrityVerifierClient	{
 					output.flush();
 					
 					//Lectura de la respuesta del servidor
-					String respuesta = input.readLine();
-					JOptionPane.showMessageDialog(null,respuesta);
+					//String respuesta = input.readLine();
+					JOptionPane.showMessageDialog(null,"Mensaje enviado correctamente.");
 					
 					String maux = JOptionPane.showInputDialog("¿Desea enviar otro mensaje? (y/n): ");
 					
