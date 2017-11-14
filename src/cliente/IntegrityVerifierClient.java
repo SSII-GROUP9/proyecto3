@@ -23,11 +23,15 @@ public	class	IntegrityVerifierClient	{
 				while(nuevoMensaje) {
 					
 					System.setProperty("javax.net.ssl.trustStore", "certificado"+metodos.compruebaSys()+"SSLStore");
-					//System.setProperty("javax.net.ssl.trustStorePassword", "123456");
 					
 					//Conexiones Socket
 					SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 					SSLSocket socket = (SSLSocket) socketFactory.createSocket("localhost",7070);
+					
+					//final String[] enabledCipherSuites = {"TLS_DHE_DSS_WITH_AES_128_CBC_SHA256"};
+				    //socket.setEnabledCipherSuites(enabledCipherSuites);
+					//con estas dos líneas forzamos el uso de un cipher suite en concreto. Por defecto, se da a elegir.
+					
 					socket.startHandshake();
 					
 					//Buffer de lectura y escritura
